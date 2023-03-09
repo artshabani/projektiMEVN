@@ -80,7 +80,7 @@ export default {
       const formData = new FormData();
       formData.append("image", this.image);
       formData.append("title", this.movie.title);
-      formData.append("category", this.movie.image);
+      formData.append("category", this.movie.category);
       formData.append("description", this.movie.description);
       formData.append("old_image", this.movie.image);
       if (this.$refs.form.validate()) {
