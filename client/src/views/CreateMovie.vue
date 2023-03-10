@@ -75,7 +75,7 @@ export default {
       const formData = new FormData();
       formData.append("image", this.image);
       formData.append("title", this.movie.title);
-      formData.append("category", this.movie.image);
+      formData.append("category", this.movie.category);
       formData.append("description", this.movie.description);
       if (this.$refs.form.validate()) {
         const response = await API.createMovie(formData);

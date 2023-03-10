@@ -27,4 +27,13 @@ export default class API {
     const res = await axios.delete(`${url}/${id}`);
     return res.data;
   }
+  //movies by category
+  static async moviesByCategory(category) {
+    const res = await axios.get(url);
+    const movies = res.data;
+    const filteredMovies = movies.filter(
+      (movie) => movie.category === category
+    );
+    return filteredMovies;
+  }
 }
