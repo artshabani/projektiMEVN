@@ -5,6 +5,7 @@ import CreateMovie from "../views/CreateMovie.vue";
 import MovieDetails from "../views/MovieDetails.vue";
 import EditMovie from "../views/EditMovie.vue";
 import PlayMovie from "../views/PlayMovie.vue";
+import MoviesByCategory from "../views/MoviesByCategory.vue";
 
 Vue.use(VueRouter);
 
@@ -23,6 +24,11 @@ const routes = [
     path: "/CreateMovie",
     name: "CreateMovie",
     component: CreateMovie,
+  },
+  {
+    path: "/MoviesByCategory/:category",
+    name: "MoviesByCategory",
+    component: MoviesByCategory,
   },
   {
     path: "/EditMovie/:id",
