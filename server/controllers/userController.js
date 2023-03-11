@@ -18,17 +18,18 @@ module.exports = {
         });
     }
 
-    const {email, password } = req.body;
+    const {name, email, password } = req.body;
 
     try {
       const user = await admin.auth().createUser({
+        name,
         email,
         password
       })
 
-    //   await admin.auth().updateProfile(user, {
-    //     displayName: name,
-    //   });
+      await admin.auth().updateUser(user.uid, {
+        displayName: name,
+      });
 
       if (adminEmails.includes(user.email)) {
         const userClaim = { admin: true };
