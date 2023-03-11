@@ -18,9 +18,12 @@
         >
           <v-img height="250" :src="`/${movie.image}`"></v-img>
 
-          <v-btn class="ml-4 mt-3" small outlined color="red">
-            {{ movie.category }}
-          </v-btn>
+          <v-card-actions class="d-flex justify-space-between">
+            <v-btn small outlined color="red">{{ movie.category }}</v-btn>
+            <v-btn small outlined color="primary"
+              >{{ movie.viewcount }} views</v-btn
+            >
+          </v-card-actions>
 
           <v-card-title class="headline">
             {{ movie.title }}

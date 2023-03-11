@@ -36,4 +36,12 @@ export default class API {
     );
     return filteredMovies;
   }
+
+  //get movie by name
+  static async getMovieByTitle(title) {
+    const res = await axios.get(url);
+    const movies = res.data;
+    const movie = movies.find((movie) => movie.title === title);
+    return movie;
+  }
 }

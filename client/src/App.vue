@@ -13,10 +13,10 @@
         <v-list-item-group color="primary">
           <v-list-item v-for="(item, i) in items" :key="i" :to="item.link">
             <v-list-item-icon>
-              <v-icon>{{item.icon}}</v-icon>
+              <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>{{item.title}}</v-list-item-title>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -26,21 +26,23 @@
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Application
-        
-      </v-toolbar-title>
+      <v-toolbar-title>Application </v-toolbar-title>
 
+      <v-btn v-if="user"> Hello {{ user.email }}! </v-btn>
+      <v-btn @click="handleLogout"> Logout </v-btn>
 
-      <v-btn v-if="user">
-        Hello {{user.email}}! 
-      </v-btn>  
-      <v-btn @click="handleLogout">
-        Logout
-      </v-btn>
-
+      <v-btn :to="{ name: 'MoviesByCategory', params: { category: 'horror' } }"
+        >Horror</v-btn
+      >
+      <v-btn :to="{ name: 'MoviesByCategory', params: { category: 'comedy' } }"
+        >Comedy</v-btn
+      >
+      <v-text-field
+        v-model="search"
+        placeholder="Enter a movie name"
+      ></v-text-field>
+      <v-btn @click="searchMovie">Submit</v-btn>
     </v-app-bar>
-
-    
 
     <v-main>
       <router-view></router-view>
@@ -49,16 +51,21 @@
 </template>
 
 <script>
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { mapState, mapActions } from 'vuex';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { mapState, mapActions } from "vuex";
+
+import API from "./api";
 
 export default {
-  computed:{
-    ...mapState(['user'])
+  computed: {
+    ...mapState(["user"]),
   },
   data() {
     return {
+      search: "",
+      // movieName: "",
       drawer: null,
+      label: "",
       items: [
         { title: "Home", icon: "mdi-home", link: "/" },
         { title: "Add Movie", icon: "mdi-note-plus", link: "/CreateMovie" },
@@ -67,19 +74,31 @@ export default {
       ],
     };
   },
-  created(){
+  created() {
     const auth = getAuth();
     onAuthStateChanged(auth, (userAuth) => {
-      if(userAuth){
-        this.$store.commit('setUser', userAuth)
+      if (userAuth) {
+        this.$store.commit("setUser", userAuth);
       }
-    })
+    });
   },
   methods: {
-    ...mapActions(['logoutUser']),
-    handleLogout(){
+    ...mapActions(["logoutUser"]),
+    handleLogout() {
       this.logoutUser();
-    }
-  }
+    },
+    handleSubmit() {
+      // Do something with this.label
+    },
+    async searchMovie() {
+      const movieName = this.search; // Get the search text
+      const movie = await API.getMovieByTitle(movieName); // Find the movie
+      if (movie) {
+        this.$router.push({ name: "MovieSearch", params: { id: movie._id } }); // Navigate to the movie page
+      } else {
+        alert("Movie not found");
+      }
+    },
+  },
 };
-</script> 
+</script>
