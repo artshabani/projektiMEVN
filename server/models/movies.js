@@ -9,6 +9,10 @@ const movieSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  viewcount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = mongoose.model("Movie", movieSchema);
