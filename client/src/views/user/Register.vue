@@ -1,21 +1,24 @@
 <script>
 import '@/firebase/index'
-import {getAuth, createUserWithEmailAndPassword, signOut} from 'firebase/auth'
 
 export default{
     data(){
         return{
+            name: '',
             email: '',
             userPassword:''
         }
     },
     methods: {
         async handleRegisterUser(){
-            const auth =  getAuth();            
-            const {user} = await createUserWithEmailAndPassword(auth,this.email, this.userPassword); 
-            console.log("user - ", user);           
-            signOut(auth);
-            this.$router.push("/login");
+            this.$store.dispatch('registerUser', {
+                name: this.name,
+                email: this.email,
+                password: this.userPassword
+            })    
+            
+            this.$router.push('/login');
+            
         }
     }
 }
@@ -26,12 +29,19 @@ export default{
         <h2>Register new user</h2>
         <form @submit.prevent="handleRegisterUser" class="login-form">
             <div class="div form-group">
+                <label for="name">Name:</label>
+                <input 
+                    id="name" 
+                    type="text" 
+                    v-model="name"
+                />
+            </div>
+            <div class="div form-group">
                 <label for="email">Email:</label>
                 <input 
                     id="email" 
                     type="email" 
-                    v-bind:value="email"
-                    v-on:input="email = $event.target.value"
+                    v-model="email"
                 />
             </div>
             <div class="div form-group">

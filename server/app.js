@@ -1,5 +1,4 @@
 // imports
-
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
@@ -28,6 +27,8 @@ mongoose
 
 //routes prefix
 app.use("/api/movies", require("./routes/routes"));
+
+app.use('/users', require("./routes/userRoute"));
 
 //start server
 
