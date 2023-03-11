@@ -1,10 +1,12 @@
 <script>
 import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
+
     export default{
         data(){
             return{
                 email:'',
                 password:'',
+                user : null
             }
         },
         methods:{
@@ -14,10 +16,8 @@ import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
                     password: this.password
                 });
                 this.$router.push('/');
-        }
-        },
-        
-        
+            }
+        }     
     }
 </script>
 

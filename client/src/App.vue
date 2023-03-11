@@ -31,12 +31,11 @@
       </v-toolbar-title>
 
 
-      <v-btn v-if="user">
+      <v-btn v-if="user" @click="handleLogout">
         Hello {{user.email}}! 
-      </v-btn>  
-      <v-btn @click="handleLogout">
         Logout
-      </v-btn>
+      </v-btn>  
+  
 
     </v-app-bar>
 
