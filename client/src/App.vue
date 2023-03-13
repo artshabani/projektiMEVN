@@ -9,9 +9,28 @@
       </v-list-item>
       <v-divider></v-divider>
       <v-list dense>
-        <v-subheader>Actions</v-subheader>
+        <v-subheader style="color: indigo">Categories</v-subheader>
+
+        <v-list-item
+          v-for="(item, i) in firstTwoItems"
+          :key="i"
+          :to="item.link"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider color="red"></v-divider>
         <v-list-item-group color="primary">
-          <v-list-item v-for="(item, i) in items" :key="i" :to="item.link">
+          <v-subheader style="color: indigo">Actions</v-subheader>
+          <v-list-item
+            v-for="(item, i) in remainingItems"
+            :key="i"
+            :to="item.link"
+          >
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
@@ -26,22 +45,31 @@
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Application </v-toolbar-title>
+      <!-- <v-toolbar-title>FilmaUBT </v-toolbar-title> -->
 
-      <v-btn v-if="user"> Hello {{ user.email }}! </v-btn>
-      <v-btn @click="handleLogout"> Logout </v-btn>
-
-      <v-btn :to="{ name: 'MoviesByCategory', params: { category: 'horror' } }"
+      <v-btn v-if="user"> Hello {{ user.email }} </v-btn>
+      <!-- <v-btn @click="handleLogout"> Logout </v-btn> -->
+      <!-- <v-btn :to="{ name: 'MoviesByCategory', params: { category: 'horror' } }"
         >Horror</v-btn
       >
       <v-btn :to="{ name: 'MoviesByCategory', params: { category: 'comedy' } }"
         >Comedy</v-btn
       >
+      <v-btn :to="{ name: 'Logs' }" small outlined color="primary">Logs</v-btn> -->
       <v-text-field
         v-model="search"
-        placeholder="Enter a movie name"
-      ></v-text-field>
-      <v-btn @click="searchMovie">Submit</v-btn>
+        placeholder="Search for a movie"
+        class="mx-auto"
+        outlined
+        dense
+        append-icon="mdi-magnify"
+        @keyup.enter="searchMovie"
+        style="max-width: 200px; margin-top: 2.5vh"
+      />
+      <!-- ======= -->
+      <!-- <v-btn v-if="user" @click="handleLogout">
+        Hello {{ user.email }}! Logout
+      </v-btn> -->
     </v-app-bar>
 
     <v-main>
@@ -58,6 +86,13 @@ import API from "./api";
 
 export default {
   computed: {
+    firstTwoItems() {
+      return this.items.slice(0, 2);
+    },
+    remainingItems() {
+      return this.items.slice(2);
+    },
+
     ...mapState(["user"]),
   },
   data() {
@@ -67,10 +102,32 @@ export default {
       drawer: null,
       label: "",
       items: [
+        {
+          title: "Horror",
+          icon: "mdi-movie",
+          link: { name: "MoviesByCategory", params: { category: "horror" } },
+        },
+        {
+          title: "Comedy",
+          icon: "mdi-movie",
+          link: { name: "MoviesByCategory", params: { category: "comedy" } },
+        },
+
         { title: "Home", icon: "mdi-home", link: "/" },
         { title: "Add Movie", icon: "mdi-note-plus", link: "/CreateMovie" },
         { title: "About", icon: "mdi-help", link: "/About" },
-        { title: "Register", icon: "mdi-home", link: "/Register" },
+        {
+          title: "Register",
+          icon: "mdi-account-plus-outline",
+          link: "/Register",
+        },
+
+        {
+          title: "Logs",
+          icon: "mdi-file-document-outline",
+          link: { name: "Logs" },
+        },
+        { title: "Logout", icon: "mdi-logout", click: this.handleLogout },
       ],
     };
   },
@@ -84,8 +141,9 @@ export default {
   },
   methods: {
     ...mapActions(["logoutUser"]),
-    handleLogout() {
-      this.logoutUser();
+    async handleLogout() {
+      await this.logoutUser();
+      this.$router.push("/login");
     },
     handleSubmit() {
       // Do something with this.label
@@ -102,3 +160,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-text-field__append-inner {
+  color: grey;
+}
+
+.v-text-field__append {
+  cursor: pointer;
+}
+
+.v-text-field__slot .v-icon {
+  color: grey;
+}
+</style>
