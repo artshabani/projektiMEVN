@@ -22,6 +22,7 @@ router.get("/", API.fetchAllMovies);
 router.get("/:id", API.fetchMovieById);
 router.post("/", upload, API.createMovie);
 router.patch("/:id", upload, API.updateMovie);
+router.patch("/noImage:id", API.updateMovieNoImage);
 router.delete("/:id", API.deleteMovie);
 
 module.exports = router;

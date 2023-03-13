@@ -31,7 +31,11 @@ mongoose
 //routes prefix
 app.use("/api/movies", require("./routes/routes"));
 
-app.use('/users', require("./routes/userRoute"));
+app.use("/users", require("./routes/userRoute"));
+
+app.use("/logs", require("./routes/logsRoute"));
+
+app.use("/updateNoImage", require("./routes/updateNoImage"));
 
 //start server
 
