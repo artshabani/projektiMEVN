@@ -17,7 +17,7 @@ export default{
                 password: this.userPassword
             })    
             
-            this.$router.push('/login');
+            this.$router.push('/');
             
         }
     }
@@ -34,6 +34,7 @@ export default{
                     id="name" 
                     type="text" 
                     v-model="name"
+                    required
                 />
             </div>
             <div class="div form-group">
@@ -42,6 +43,7 @@ export default{
                     id="email" 
                     type="email" 
                     v-model="email"
+                    required
                 />
             </div>
             <div class="div form-group">
@@ -50,6 +52,7 @@ export default{
                     id="password" 
                     type="password" 
                     v-model="userPassword"
+                    required
                 />
             </div>
 

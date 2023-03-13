@@ -1,48 +1,58 @@
 <script>
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
-
     export default{
         data(){
             return{
                 email:'',
                 password:'',
-                user : null
+                errorMessage: '',
             }
         },
         methods:{
             async handleLoginUser() {
-                this.$store.dispatch('loginUser', {
-                    email: this.email,
-                    password: this.password
-                });
-                this.$router.push('/');
-            }
+  try {
+    await this.$store.dispatch('loginUser', {
+      email: this.email,
+      password: this.password,
+    });
+    // Redirect the user to the home page only if the login was successful
+    this.$router.replace({ name: 'Home', params: { message: 'You have successfully logged in.' } });
+  } catch (error) {
+    // If the user doesn't exist, display an error message
+    if (error.response && error.response.status === 404) {
+      this.errorMessage = 'User not found. Please check your email and password.';
+    } else {
+      this.errorMessage = 'An error occurred. Please try again later.';
+    }
+  }
+},
         }     
     }
 </script>
 
 
 <template>
-    <form @submit.prevent="handleLoginUser" class="login-form">
+    <form @submit.prevent="handleLoginUser" class="login-form" method="POST">
         <h3>Login</h3>
-        {{  this.user && this.user.email }}
         <div class="form-wrapper">
             <div class="form-group">
                 <label for="email" >Email:</label>
                 <input id="email"
                     v-model="email"
+                    required
                 />
             </div>
             <div class="form-group">
                 <label for="password" >Password:</label>
                 <input id="password" type="password"
                     v-model="password"
+                    required
                 />
             </div>
             <div class="controlls">
                 <button class="login-button">Login</button>
             </div>
         </div>
+        <p v-if="errorMessage">{{ errorMessage }}</p>
     </form>
 </template>
 
