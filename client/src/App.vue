@@ -43,22 +43,12 @@
     </v-navigation-drawer>
 
     <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+  <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Application </v-toolbar-title>
+  <v-toolbar-title>Application </v-toolbar-title>
 
-      <v-btn v-if="user" @click="handleLogout">
-        Hello {{ user.email }}! Logout
-      </v-btn>
-
-      <!-- <v-btn @click="handleLogout"> Logout </v-btn> -->
-      <!-- <v-btn :to="{ name: 'MoviesByCategory', params: { category: 'horror' } }"
-        >Horror</v-btn
-      >
-      <v-btn :to="{ name: 'MoviesByCategory', params: { category: 'comedy' } }"
-        >Comedy</v-btn
-      >
-      <v-btn :to="{ name: 'Logs' }" small outlined color="primary">Logs</v-btn> -->
+  <v-row class="fill-height">
+    <v-col class="d-flex align-center justify-center">
       <v-text-field
         v-model="search"
         placeholder="Search for a movie"
@@ -67,13 +57,18 @@
         dense
         append-icon="mdi-magnify"
         @keyup.enter="searchMovie"
-        style="max-width: 200px; margin-top: 2.5vh"
+        style="max-width: 200px;"
       />
-      <!-- ======= -->
-      <!-- <v-btn v-if="user" @click="handleLogout">
+    </v-col>
+
+    <v-col class="d-flex align-center justify-end">
+      <v-btn v-if="user" @click="handleLogout">
         Hello {{ user.email }}! Logout
-      </v-btn> -->
-    </v-app-bar>
+      </v-btn>
+    </v-col>
+  </v-row>
+
+</v-app-bar>
 
     <v-main>
       <router-view></router-view>
@@ -99,49 +94,54 @@ export default {
     ...mapState(["user"]),
   },
   data() {
-    return {
-      search: "",
-      // movieName: "",
-      drawer: null,
-      label: "",
-      items: [
-        {
-          title: "Horror",
-          icon: "mdi-movie",
-          link: { name: "MoviesByCategory", params: { category: "horror" } },
-        },
-        {
-          title: "Comedy",
-          icon: "mdi-movie",
-          link: { name: "MoviesByCategory", params: { category: "comedy" } },
-        },
+  return {
+    search: "",
+    drawer: null,
+    label: "",
+    items: [
+      {
+        title: "Horror",
+        icon: "mdi-movie",
+        link: { name: "MoviesByCategory", params: { category: "horror" } },
+      },
+      {
+        title: "Comedy",
+        icon: "mdi-movie",
+        link: { name: "MoviesByCategory", params: { category: "comedy" } },
+      },     
 
-        { title: "Home", icon: "mdi-home", link: "/" },
-        { title: "Add Movie", icon: "mdi-note-plus", link: "/CreateMovie" },
-        { title: "About", icon: "mdi-help", link: "/About" },
-        {
-          title: "Register",
-          icon: "mdi-account-plus-outline",
-          link: "/Register",
-        },
-
-        {
+      { title: "Home", icon: "mdi-home", link: "/" },
+      { title: "About", icon: "mdi-help", link: "/About" },
+      {
+        title: "Register",
+        icon: "mdi-account-plus-outline",
+        link: "/Register",
+      },
+      { title: "Logout", icon: "mdi-logout", click: this.handleLogout },
+    ],
+  };
+},
+created() {
+  const auth = getAuth();
+  onAuthStateChanged(auth, (userAuth) => {
+    if (userAuth) {
+      this.$store.commit("setUser", userAuth);
+      const user = userAuth.toJSON();
+      if (user.email === "test2023@gmail.com" || user.email === 'test31@gmail.com') {
+        this.items.splice(3, 0, {
+          title: "Add Movie",
+          icon: "mdi-note-plus",
+          link: "/CreateMovie",
+        });
+        this.items.splice(5, 0, {
           title: "Logs",
           icon: "mdi-file-document-outline",
           link: { name: "Logs" },
-        },
-        { title: "Logout", icon: "mdi-logout", click: this.handleLogout },
-      ],
-    };
-  },
-  created() {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (userAuth) => {
-      if (userAuth) {
-        this.$store.commit("setUser", userAuth);
+        });
       }
-    });
-  },
+    }
+  });
+},
   methods: {
     ...mapActions(["logoutUser"]),
     async handleLogout() {
