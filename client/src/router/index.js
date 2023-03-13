@@ -6,11 +6,11 @@ import MovieDetails from "../views/MovieDetails.vue";
 import EditMovie from "../views/EditMovie.vue";
 import PlayMovie from "../views/PlayMovie.vue";
 import MoviesByCategory from "../views/MoviesByCategory.vue";
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import MovieSearch from "../views/MovieSearch.vue";
-
+import Logs from "../views/Logs.vue";
 
 Vue.use(VueRouter);
 
@@ -71,6 +71,11 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "login" */ "../views/user/Login.vue"),
   },
+  {
+    path: "/logs",
+    name: "logs",
+    component: Logs,
+  },
 ];
 
 const router = new VueRouter({
@@ -86,19 +91,15 @@ router.beforeEach((to, from, next) => {
 
     if (to.matched.some((record) => shouldBeLoggedIn(record))) {
       if (!user) {
-        next('/login');
+        next("/login");
       } else {
-        const tokenResult =
-          await getAuth().currentUser.getIdTokenResult();
+        const tokenResult = await getAuth().currentUser.getIdTokenResult();
         const isAdmin = tokenResult.claims.admin;
-        if (
-          isAdmin &&
-          to.matched.some((record) => !record.meta.isAdmin)
-        ) {
+        if (isAdmin && to.matched.some((record) => !record.meta.isAdmin)) {
           next();
         } else if (to.matched.some((record) => record.meta.isAdmin)) {
           if (!tokenResult.claims.admin) {
-            next('/');
+            next("/");
           } else {
             next();
           }

@@ -51,7 +51,6 @@
         Hello {{ user.email }}! Logout
       </v-btn>
 
-      <v-btn v-if="user"> Hello {{ user.email }} </v-btn>
       <!-- <v-btn @click="handleLogout"> Logout </v-btn> -->
       <!-- <v-btn :to="{ name: 'MoviesByCategory', params: { category: 'horror' } }"
         >Horror</v-btn
