@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container style="background-color: #f0f0f0; height: 100%">
     <v-row no-gutters>
       <v-col sm="10" class="mx-auto">
         <v-card class="pa-5">
@@ -22,11 +22,11 @@
               label="Category"
               v-model="movie.category"
               prepend-icon="mdi-view-list"
-              :rules="rules"
+              :rules="[...rules, categoryRule]"
             ></v-text-field>
 
             <v-text-field
-              label="Decription"
+              label="Description"
               v-model="movie.description"
               prepend-icon="mdi-note-plus"
               :rules="rules"
@@ -65,6 +65,9 @@ export default {
         image: "",
       },
       image: "",
+      categoryRule: (value) =>
+        ["comedy", "horror"].includes(value) ||
+        "Category must be either 'comedy' or 'horror'",
     };
   },
   methods: {

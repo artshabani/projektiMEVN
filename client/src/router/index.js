@@ -6,6 +6,7 @@ import MovieDetails from "../views/MovieDetails.vue";
 import EditMovie from "../views/EditMovie.vue";
 import PlayMovie from "../views/PlayMovie.vue";
 import MoviesByCategory from "../views/MoviesByCategory.vue";
+import MovieSearch from "../views/MovieSearch.vue";
 
 Vue.use(VueRouter);
 
@@ -24,6 +25,11 @@ const routes = [
     path: "/CreateMovie",
     name: "CreateMovie",
     component: CreateMovie,
+  },
+  {
+    path: "/MovieSearch/:id",
+    name: "MovieSearch",
+    component: MovieSearch,
   },
   {
     path: "/MoviesByCategory/:category",
@@ -50,17 +56,17 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
   {
-    path: '/register',
-    name: 'register',
+    path: "/register",
+    name: "register",
     component: () =>
       import(/* webpackChunkName: "register" */ "../views/user/Register.vue"),
   },
   {
-    path: '/login',
-    name: 'login',
+    path: "/login",
+    name: "login",
     component: () =>
       import(/* webpackChunkName: "login" */ "../views/user/Login.vue"),
-  }
+  },
 ];
 
 const router = new VueRouter({

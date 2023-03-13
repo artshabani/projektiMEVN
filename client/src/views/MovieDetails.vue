@@ -1,10 +1,12 @@
-<template>
+
+  <template>
   <div style="background-color: #f0f0f0; height: 100%">
     <v-container>
       <v-row>
         <v-col sm="10" class="pa-4 mx-auto d-flex justify-center align-center">
           <v-card class="pa-2 movie-card">
             <v-img :src="`/${movie.image}`"></v-img>
+
 
             <v-card-actions class="pb-0">
               <v-row class="mt-1 mx-1">
@@ -40,6 +42,8 @@
       </v-row>
     </v-container>
   </div>
+
+
 </template>
 
 <script>

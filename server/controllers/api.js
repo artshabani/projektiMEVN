@@ -1,4 +1,5 @@
 const Movie = require("../models/movies");
+
 const fs = require("fs");
 
 module.exports = class API {
@@ -49,6 +50,19 @@ module.exports = class API {
     }
     const newMovie = req.body;
     newMovie.image = new_image;
+    try {
+      await Movie.findByIdAndUpdate(id, newMovie);
+      res.status(200).json({ message: "Movie updated successfully!" });
+    } catch (error) {
+      res.status(404).json({ message: err.message });
+    }
+  }
+  //update movie masi ta lun filmin
+  static async updateMovieNoImage(req, res) {
+    const id = req.params.id;
+    const movie = await Movie.findById(id);
+    const newMovie = req.body;
+    newMovie.viewcount = movie.viewcount + 1;
     try {
       await Movie.findByIdAndUpdate(id, newMovie);
       res.status(200).json({ message: "Movie updated successfully!" });

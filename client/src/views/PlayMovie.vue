@@ -1,5 +1,6 @@
 <template>
   <div class="art">
+
     <div class="countdown" v-if="showCountdown">{{ countdown }}</div>
     <div v-if="showViewCount" class="view-count">+1 view</div>
     <video
@@ -10,6 +11,9 @@
       @pause="stopTimer"
       @ended="incrementViewCount"
     >
+
+   
+
       <source src="../videos/peakyB.mp4" type="video/mp4" />
     </video>
   </div>
@@ -23,16 +27,19 @@ export default {
   data() {
     return {
       movie: {},
+
       timer: null,
       duration: 5, // set the minimum duration required before the viewcount increments
       countdown: 5,
       showCountdown: false,
       showViewCount: false,
+
     };
   },
   async created() {
     const id = this.$route.params.id;
     this.movie = await API.getMovieById(id);
+
   },
   methods: {
     startTimer() {
@@ -56,6 +63,9 @@ export default {
         this.showViewCount = true;
       }
     },
+
+    
+
   },
 };
 </script>
@@ -83,6 +93,7 @@ p {
 video {
   height: 630px;
 }
+
 .countdown {
   position: absolute;
   top: 20px;
@@ -97,4 +108,5 @@ video {
   color: green;
   font-size: 36px;
 }
+
 </style>
