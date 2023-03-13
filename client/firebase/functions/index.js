@@ -13,7 +13,7 @@ const db = admin.firestore();
 //   response.send("Hello from Firebase!");
 // });
 
-const adminEmails = ['anisa1@gmail.com', 'diellza1@gmail.com', 'art1@gmail.com'];
+const adminEmails = ['test2023@gmail.com','test31@gmail.com'];
 
 exports.addUserRole = functions.auth.user().onCreate(async (user) => {
     //condition to promote a user to an admin
@@ -21,13 +21,15 @@ exports.addUserRole = functions.auth.user().onCreate(async (user) => {
     try{
         if(adminEmails.includes(user.email)){
             const userClaims = {admin:true};
+            
 
             await admin.auth().setCustomUserClaims(user.uid, userClaims);
 
-            db.collection('roles').doc(user.uid).set({
+            await admin.firestore().collection('roles').doc(user.uid).set({
                 email: user.email,
                 role: userClaims
-            })
+              })
+            
         }
     }catch(err){
         console.log(err);

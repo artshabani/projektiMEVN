@@ -2,9 +2,6 @@ import { createUserWithEmailAndPassword, getAuth, signOut, updateProfile } from 
 
 async function signupUser(payload){
     const {name,email,password} = payload;
-
-    
-
     const auth = getAuth();
     const result = await createUserWithEmailAndPassword(auth, email, password);
     const user = result.user;

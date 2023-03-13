@@ -6,6 +6,9 @@ import MovieDetails from "../views/MovieDetails.vue";
 import EditMovie from "../views/EditMovie.vue";
 import PlayMovie from "../views/PlayMovie.vue";
 import MoviesByCategory from "../views/MoviesByCategory.vue";
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 Vue.use(VueRouter);
 
@@ -67,6 +70,39 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  onAuthStateChanged(getAuth(), async (user) => {
+    const shouldBeLoggedIn = (record) =>
+      record.meta.isAuthenticated || record.meta.isAdmin;
+
+    if (to.matched.some((record) => shouldBeLoggedIn(record))) {
+      if (!user) {
+        next('/login');
+      } else {
+        const tokenResult =
+          await getAuth().currentUser.getIdTokenResult();
+        const isAdmin = tokenResult.claims.admin;
+        if (
+          isAdmin &&
+          to.matched.some((record) => !record.meta.isAdmin)
+        ) {
+          next();
+        } else if (to.matched.some((record) => record.meta.isAdmin)) {
+          if (!tokenResult.claims.admin) {
+            next('/');
+          } else {
+            next();
+          }
+        } else {
+          next();
+        }
+      }
+    } else {
+      next();
+    }
+  });
 });
 
 export default router;

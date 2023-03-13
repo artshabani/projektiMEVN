@@ -1,8 +1,9 @@
 const { ReasonPhrases, StatusCodes } = require('http-status-codes');
 const registerUserSchema = require('../validators/user/registerUserSchema');
 const admin = require('../services/firebase');
+const bcrypt = require('bcrypt');
 
-const adminEmails = ['anisa1@gmail.com', 'diellza1@gmail.com', 'art1@gmail.com'];
+const adminEmails = ['test2023@gmail.com','test31@gmail.com'];
 
 module.exports = {
   async register(req, res) {
@@ -26,11 +27,6 @@ module.exports = {
         email,
         password
       })
-
-      await admin.auth().updateUser(user.uid, {
-        displayName: name,
-      });
-
       if (adminEmails.includes(user.email)) {
         const userClaim = { admin: true };
         await admin.auth().setCustomUserClaims(user.uid, userClaim);
@@ -49,6 +45,31 @@ module.exports = {
           error: error.message,
           message: ReasonPhrases.FORBIDDEN,
         });
+    }
+  },
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
+      const userRecord = await admin.auth().getUserByEmail(email);
+      const { uid, customClaims = {} } = userRecord;
+      const { passwordHash } = customClaims;
+
+      if (!passwordHash) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid credentials' });
+      }
+
+      const isMatch = await bcrypt.compare(password, passwordHash);
+      if (!isMatch) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid credentials' });
+      }
+
+      const token = await admin.auth().createCustomToken(uid);
+      return res.json({ token });
+    } catch (error) {
+      console.log('Error:', error);
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
     }
   },
 };

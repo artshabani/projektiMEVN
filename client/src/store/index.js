@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getAuth, signOut } from 'firebase/auth';
 import apiRequest from '@/utility/apiRequest';
+import loginUser from "@/firebase/user/loginUser";
 
 Vue.use(Vuex)
 
@@ -18,12 +19,13 @@ const store = new Vuex.Store({
     },
     mutations:{
         setUser(state,user){
+            console.log("setUser mutation called with user: ", user);
             state.user = user;
         }
     },
     actions:{
         async loginUser({commit},payload){
-            const user = await apiRequest.loginUser(payload);
+            const user = await loginUser(payload);
             commit('setUser', user);
         },
         async registerUser({commit},payload){
