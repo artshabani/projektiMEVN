@@ -14,7 +14,7 @@ export default{
             this.$store.dispatch('registerUser', {
                 name: this.name,
                 email: this.email,
-                password: this.password
+                password: this.userPassword
             })    
             
             this.$router.push('/login');
@@ -28,6 +28,14 @@ export default{
     <main class="container">
         <h2>Register new user</h2>
         <form @submit.prevent="handleRegisterUser" class="login-form">
+            <div class="div form-group">
+                <label for="name">Name:</label>
+                <input 
+                    id="name" 
+                    type="text" 
+                    v-model="name"
+                />
+            </div>
             <div class="div form-group">
                 <label for="email">Email:</label>
                 <input 

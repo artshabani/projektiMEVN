@@ -45,7 +45,11 @@
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <!-- <v-toolbar-title>FilmaUBT </v-toolbar-title> -->
+      <v-toolbar-title>Application </v-toolbar-title>
+
+      <v-btn v-if="user" @click="handleLogout">
+        Hello {{ user.email }}! Logout
+      </v-btn>
 
       <v-btn v-if="user"> Hello {{ user.email }} </v-btn>
       <!-- <v-btn @click="handleLogout"> Logout </v-btn> -->

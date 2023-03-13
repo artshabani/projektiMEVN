@@ -23,11 +23,12 @@ const store = new Vuex.Store({
     },
     actions:{
         async loginUser({commit},payload){
-            const user = await loginUser(payload);
+            const user = await apiRequest.loginUser(payload);
             commit('setUser', user);
         },
         async registerUser({commit},payload){
-            await apiRequest.registerUser(payload);
+            const user = await apiRequest.registerUser(payload);
+            commit('setUser', user);
         },
         logoutUser({commit}){
             const auth = getAuth();
